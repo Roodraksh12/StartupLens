@@ -8,9 +8,13 @@ import {
   MonetizationCard, MvpRoadmapCard, InvestorReadinessCard, 
   BusinessModelCard, GoToMarketCard 
 } from './ResultCards2';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, Download } from 'lucide-react';
+import { useState } from 'react';
+import html2pdf from 'html2pdf.js';
 
 export default function ResultsDashboard({ results, onReset }) {
+  const [isExporting, setIsExporting] = useState(false);
+
   if (!results) return null;
 
   // Extremely defensive fallback structure to prevent React crashes
@@ -48,6 +52,23 @@ export default function ResultsDashboard({ results, onReset }) {
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
   };
 
+  const handleExportPdf = () => {
+    setIsExporting(true);
+    const element = document.getElementById('startup-report-content');
+    
+    const opt = {
+      margin:       [0.5, 0.5, 0.5, 0.5],
+      filename:     'Startup_Analysis_Report.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      setIsExporting(false);
+    });
+  };
+
   const SectionHeader = ({ title, subtitle }) => (
     <div className="mb-6 mt-12 border-b border-slate-200 pb-4">
       <h2 className="text-2xl font-bold text-slate-900">{title}</h2>
@@ -58,10 +79,11 @@ export default function ResultsDashboard({ results, onReset }) {
   return (
     <div className="w-full max-w-5xl mx-auto pb-16">
       <motion.div 
+        id="startup-report-content"
         variants={containerVariants} 
         initial="hidden" 
         animate="show" 
-        className="space-y-12"
+        className="space-y-12 bg-[#fbfbfd] p-4 sm:p-8 rounded-3xl"
       >
         {/* Section 1: The Verdict */}
         <motion.div variants={itemVariants}>
@@ -122,11 +144,28 @@ export default function ResultsDashboard({ results, onReset }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.5, duration: 0.5 }}
-        className="mt-16 flex justify-center"
+        className="mt-16 flex flex-col sm:flex-row justify-center gap-4 px-4"
       >
         <button 
+          onClick={handleExportPdf}
+          disabled={isExporting}
+          className="btn-primary flex items-center justify-center gap-2 flex-1 max-w-xs mx-auto sm:mx-0"
+        >
+          {isExporting ? (
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-slate-200 border-t-white rounded-full animate-spin"></span>
+              Generating PDF...
+            </span>
+          ) : (
+            <>
+              <Download className="w-5 h-5" />
+              Export to PDF
+            </>
+          )}
+        </button>
+        <button 
           onClick={onReset}
-          className="btn-secondary flex items-center gap-2"
+          className="btn-secondary flex items-center justify-center gap-2 flex-1 max-w-xs mx-auto sm:mx-0"
         >
           <RotateCcw className="w-4 h-4" />
           Evaluate Another Idea
