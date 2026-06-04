@@ -2,11 +2,11 @@ import { motion } from 'framer-motion';
 import { Check, X, AlertTriangle, TrendingUp, DollarSign, Users, Target, Zap, ShieldAlert, Award, Lightbulb } from 'lucide-react';
 
 export const SummaryCard = ({ summary }) => (
-  <div className="glass-card p-6 sm:p-8 bg-slate-900 border-transparent shadow-lg">
-    <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
-      <Target className="w-5 h-5 text-indigo-400" /> Executive Summary
+  <div className="bg-black/90 backdrop-blur-xl p-8 sm:p-10 rounded-[2rem] border border-white/10 shadow-2xl">
+    <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 tracking-tight">
+      <Target className="w-6 h-6 text-indigo-400" /> Executive Summary
     </h3>
-    <p className="text-lg leading-relaxed text-slate-200">{summary}</p>
+    <p className="text-lg leading-relaxed text-slate-300 font-medium">{summary}</p>
   </div>
 );
 
@@ -34,11 +34,11 @@ export const FinalScoreCard = ({ scoreData }) => {
   const strokeDashoffset = circumference - (scoreData.score / 100) * circumference;
 
   return (
-    <div className="glass-card p-6 flex flex-col items-center text-center justify-center relative overflow-hidden">
-      <h3 className="text-lg font-semibold text-slate-900 mb-6">Final Validation Score</h3>
+    <div className="glass-card p-8 flex flex-col items-center text-center justify-center relative overflow-hidden rounded-[2rem]">
+      <h3 className="text-lg font-semibold text-slate-900 mb-6 tracking-tight">Final Validation Score</h3>
       
-      <div className="relative w-40 h-40 flex items-center justify-center mb-6">
-        <svg className="transform -rotate-90 w-40 h-40">
+      <div className="relative w-40 h-40 flex items-center justify-center mb-8">
+        <svg className="transform -rotate-90 w-40 h-40 drop-shadow-md">
           <circle cx="80" cy="80" r={radius} className="stroke-slate-100" strokeWidth="12" fill="none" />
           <motion.circle
             cx="80" cy="80" r={radius}
@@ -57,11 +57,11 @@ export const FinalScoreCard = ({ scoreData }) => {
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5 }}
-            className="text-4xl font-bold font-heading text-slate-900"
+            className="text-5xl font-bold font-heading text-slate-900 tracking-tighter"
           >
             {scoreData.score}
           </motion.span>
-          <span className="text-xs text-slate-500">/ 100</span>
+          <span className="text-sm font-medium text-slate-500 mt-1">/ 100</span>
         </div>
       </div>
       
@@ -80,38 +80,38 @@ export const FinalScoreCard = ({ scoreData }) => {
 export const ProblemScoreCard = ({ problem }) => {
   const isGood = problem.score >= 7;
   return (
-    <div className="glass-card p-6 flex flex-col justify-between">
+    <div className="glass-card p-8 flex flex-col justify-between rounded-[2rem]">
       <div>
-        <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-amber-500" /> Problem Validation
+        <h3 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2 tracking-tight">
+          <AlertTriangle className="w-6 h-6 text-amber-500" /> Problem Validation
         </h3>
         <div className="flex items-center gap-4 mb-4">
-          <div className="text-3xl font-bold font-heading text-slate-900">{problem.score}<span className="text-sm text-slate-500">/10</span></div>
+          <div className="text-4xl font-bold font-heading text-slate-900 tracking-tighter">{problem.score}<span className="text-sm font-medium text-slate-500">/10</span></div>
           <span className={`badge ${isGood ? 'badge-green' : 'badge-yellow'}`}>{problem.verdict}</span>
         </div>
-        <p className="text-slate-600 text-sm">{problem.reasoning}</p>
+        <p className="text-slate-600 text-sm leading-relaxed">{problem.reasoning}</p>
       </div>
     </div>
   );
 };
 
 export const MarketOpportunityCard = ({ market }) => (
-  <div className="glass-card p-6">
-    <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-      <TrendingUp className="w-5 h-5 text-emerald-600" /> Market Opportunity
+  <div className="glass-card p-8 rounded-[2rem]">
+    <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2 tracking-tight">
+      <TrendingUp className="w-6 h-6 text-emerald-600" /> Market Opportunity
     </h3>
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-        <p className="text-xs text-slate-500 mb-1">India Market Size</p>
-        <p className="text-lg font-bold text-slate-900">{market.indiaMarketSize}</p>
+      <div className="bg-white border border-slate-200/50 rounded-2xl p-5 shadow-sm">
+        <p className="text-xs font-medium text-slate-500 mb-1">India Market Size</p>
+        <p className="text-xl font-bold text-slate-900 tracking-tight">{market.indiaMarketSize}</p>
       </div>
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-        <p className="text-xs text-slate-500 mb-1">Global Market Size</p>
-        <p className="text-lg font-bold text-slate-900">{market.globalMarketSize}</p>
+      <div className="bg-white border border-slate-200/50 rounded-2xl p-5 shadow-sm">
+        <p className="text-xs font-medium text-slate-500 mb-1">Global Market Size</p>
+        <p className="text-xl font-bold text-slate-900 tracking-tight">{market.globalMarketSize}</p>
       </div>
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-        <p className="text-xs text-slate-500 mb-1">Growth Rate (CAGR)</p>
-        <p className="text-lg font-bold text-emerald-600">{market.growthRate}</p>
+      <div className="bg-white border border-slate-200/50 rounded-2xl p-5 shadow-sm">
+        <p className="text-xs font-medium text-slate-500 mb-1">Growth Rate (CAGR)</p>
+        <p className="text-xl font-bold text-emerald-600 tracking-tight">{market.growthRate}</p>
       </div>
     </div>
     <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex gap-3">

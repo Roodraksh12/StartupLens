@@ -22,10 +22,10 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
   ];
 
   return (
-    <div className="w-full max-w-2xl mx-auto glass-card p-6 sm:p-8 animate-in fade-in slide-in-from-right-8 duration-500">
+    <div className="w-full max-w-2xl mx-auto glass-card p-8 sm:p-10 animate-in fade-in slide-in-from-right-8 duration-500">
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-slate-100 p-2 rounded-lg border border-slate-200">
-          <Target className="w-5 h-5 text-slate-700" />
+        <div className="bg-purple-50/50 p-2.5 rounded-2xl border border-purple-100 shadow-sm">
+          <Target className="w-6 h-6 text-purple-600" />
         </div>
         <div>
           <h2 className="text-2xl font-bold">Additional Context</h2>

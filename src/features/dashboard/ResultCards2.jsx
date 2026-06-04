@@ -2,18 +2,18 @@ import { motion } from 'framer-motion';
 import { DollarSign, Map, Presentation, Briefcase, Rocket, Calendar, CheckCircle2 } from 'lucide-react';
 
 export const MonetizationCard = ({ models }) => (
-  <div className="glass-card p-6">
-    <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-      <DollarSign className="w-5 h-5 text-emerald-600" /> Monetization Ideas
+  <div className="glass-card p-8 rounded-[2rem]">
+    <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2 tracking-tight">
+      <DollarSign className="w-6 h-6 text-emerald-600" /> Monetization Ideas
     </h3>
     <div className="grid grid-cols-1 gap-4">
       {models.map((model, i) => (
-        <div key={i} className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+        <div key={i} className="bg-white border border-slate-200/50 rounded-2xl p-5 shadow-sm">
           <div className="flex justify-between items-start mb-2">
-            <h4 className="font-bold text-emerald-900 text-sm">{model.model}</h4>
+            <h4 className="font-bold text-slate-900 text-sm">{model.model}</h4>
             <span className={`badge ${model.viability === 'High' ? 'badge-green' : model.viability === 'Medium' ? 'badge-yellow' : 'badge-red'}`}>{model.viability}</span>
           </div>
-          <p className="text-xs text-slate-700">{model.description}</p>
+          <p className="text-xs text-slate-600 leading-relaxed">{model.description}</p>
         </div>
       ))}
     </div>
@@ -23,22 +23,22 @@ export const MonetizationCard = ({ models }) => (
 export const MvpRoadmapCard = ({ mvp }) => {
   const phases = [mvp.phase1, mvp.phase2, mvp.phase3];
   return (
-    <div className="glass-card p-6 overflow-x-auto">
-      <h3 className="text-lg font-semibold text-slate-900 mb-6 flex items-center gap-2">
-        <Map className="w-5 h-5 text-indigo-600" /> MVP Roadmap
+    <div className="glass-card p-8 overflow-x-auto rounded-[2rem]">
+      <h3 className="text-lg font-semibold text-slate-900 mb-8 flex items-center gap-2 tracking-tight">
+        <Map className="w-6 h-6 text-indigo-600" /> MVP Roadmap
       </h3>
-      <div className="flex flex-col sm:flex-row gap-4 min-w-max sm:min-w-0">
+      <div className="flex flex-col sm:flex-row gap-6 min-w-max sm:min-w-0">
         {phases.map((phase, i) => (
-          <div key={i} className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-5 relative">
-            <div className="absolute top-0 right-5 -mt-3 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+          <div key={i} className="flex-1 bg-white border border-slate-200/50 rounded-2xl p-6 relative shadow-sm">
+            <div className="absolute top-0 right-6 -mt-3 bg-black text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
               {phase.duration}
             </div>
-            <h4 className="font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200">{phase.title}</h4>
-            <ul className="space-y-3">
+            <h4 className="font-bold text-slate-900 mb-4 pb-3 border-b border-slate-100">{phase.title}</h4>
+            <ul className="space-y-4">
               {phase.tasks.map((task, j) => (
-                <li key={j} className="text-sm text-slate-700 flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
-                  <span>{task}</span>
+                <li key={j} className="text-sm text-slate-600 flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+                  <span className="leading-relaxed">{task}</span>
                 </li>
               ))}
             </ul>

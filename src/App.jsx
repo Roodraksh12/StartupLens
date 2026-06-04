@@ -71,7 +71,11 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-[#fbfbfd]">
+      {/* Premium Apple-style soft mesh gradients */}
+      <div className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-blue-400/10 blur-[140px] pointer-events-none" />
+      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-purple-400/10 blur-[140px] pointer-events-none" />
+      <div className="fixed top-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-emerald-400/5 blur-[120px] pointer-events-none" />
       
       <Header />
       

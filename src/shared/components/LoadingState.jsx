@@ -24,21 +24,21 @@ export default function LoadingState() {
     <div className="w-full max-w-5xl mx-auto py-8 flex flex-col items-center">
       <div className="relative flex justify-center items-center h-32 w-32 mb-8">
         <motion.div 
-          className="absolute inset-0 rounded-full border-t-2 border-slate-800 border-r-2 border-r-transparent opacity-60"
+          className="absolute inset-0 rounded-full border-t-2 border-slate-300 border-r-2 border-r-transparent opacity-60"
           animate={{ rotate: 360 }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
         />
         <motion.div 
-          className="absolute inset-2 rounded-full border-b-2 border-slate-400 border-l-2 border-l-transparent opacity-80"
+          className="absolute inset-2 rounded-full border-b-2 border-slate-200 border-l-2 border-l-transparent opacity-80"
           animate={{ rotate: -360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
         <motion.div 
-          className="bg-slate-900 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg"
-          animate={{ scale: [1, 1.1, 1] }}
+          className="bg-black/90 backdrop-blur-md w-12 h-12 rounded-[1rem] flex items-center justify-center shadow-xl"
+          animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <span className="text-white font-bold text-xl">AI</span>
+          <span className="text-white font-bold text-xl tracking-tighter">AI</span>
         </motion.div>
       </div>
       
