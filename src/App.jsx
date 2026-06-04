@@ -71,10 +71,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080d1a] relative overflow-hidden text-slate-200">
-      {/* Background glow effects */}
-      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-900/20 blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/10 blur-[120px] pointer-events-none" />
+    <div className="min-h-screen relative overflow-hidden">
       
       <Header />
       
@@ -105,12 +102,12 @@ export default function App() {
               {isLoading && <LoadingState />}
               
               {error && !isLoading && (
-                <div className="w-full max-w-2xl mx-auto glass-card p-8 text-center border-rose-500/30">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-500/20 mb-6">
-                    <AlertCircle className="w-8 h-8 text-rose-400" />
+                <div className="w-full max-w-2xl mx-auto glass-card p-8 text-center border-rose-200">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-50 mb-6">
+                    <AlertCircle className="w-8 h-8 text-rose-500" />
                   </div>
-                  <h2 className="text-2xl font-bold text-white mb-4">Analysis Failed</h2>
-                  <p className="text-slate-400 mb-8">{error}</p>
+                  <h2 className="text-2xl font-bold text-slate-900 mb-4">Analysis Failed</h2>
+                  <p className="text-slate-600 mb-8">{error}</p>
                   <button onClick={() => setCurrentStep(2)} className="btn-primary">
                     Try Again
                   </button>

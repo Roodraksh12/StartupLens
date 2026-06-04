@@ -24,65 +24,65 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
   return (
     <div className="w-full max-w-2xl mx-auto glass-card p-6 sm:p-8 animate-in fade-in slide-in-from-right-8 duration-500">
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-cyan-500/20 p-2 rounded-lg border border-cyan-500/30">
-          <Target className="w-5 h-5 text-cyan-400" />
+        <div className="bg-slate-100 p-2 rounded-lg border border-slate-200">
+          <Target className="w-5 h-5 text-slate-700" />
         </div>
         <div>
           <h2 className="text-2xl font-bold">Additional Context</h2>
-          <p className="text-slate-400 text-sm">Help the AI understand your market</p>
+          <p className="text-slate-500 text-sm">Help the AI understand your market</p>
         </div>
       </div>
 
       <div className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Industry</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Industry</label>
             <select 
               className="input-field appearance-none"
               value={data.industry}
               onChange={(e) => updateData({ industry: e.target.value })}
             >
-              {industries.map(ind => <option key={ind} value={ind} className="bg-[#080d1a]">{ind}</option>)}
+              {industries.map(ind => <option key={ind} value={ind} className="bg-white">{ind}</option>)}
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Target Users</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Target Users</label>
             <select 
               className="input-field appearance-none"
               value={data.targetUsers}
               onChange={(e) => updateData({ targetUsers: e.target.value })}
             >
-              {targetUsersList.map(user => <option key={user} value={user} className="bg-[#080d1a]">{user}</option>)}
+              {targetUsersList.map(user => <option key={user} value={user} className="bg-white">{user}</option>)}
             </select>
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">Business Model</label>
+          <label className="block text-sm font-medium text-slate-700 mb-2">Business Model</label>
           <select 
             className="input-field appearance-none"
             value={data.businessModel}
             onChange={(e) => updateData({ businessModel: e.target.value })}
           >
-            {businessModels.map(model => <option key={model} value={model} className="bg-[#080d1a]">{model}</option>)}
+            {businessModels.map(model => <option key={model} value={model} className="bg-white">{model}</option>)}
           </select>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Current Traction</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Current Traction</label>
             <select 
               className="input-field appearance-none"
               value={data.traction}
               onChange={(e) => updateData({ traction: e.target.value })}
             >
-              {tractionOptions.map(opt => <option key={opt} value={opt} className="bg-[#080d1a]">{opt}</option>)}
+              {tractionOptions.map(opt => <option key={opt} value={opt} className="bg-white">{opt}</option>)}
             </select>
           </div>
 
           <div>
-            <label htmlFor="unfairAdvantage" className="block text-sm font-medium text-slate-300 mb-2">
+            <label htmlFor="unfairAdvantage" className="block text-sm font-medium text-slate-700 mb-2">
               Unfair Advantage <span className="text-slate-500 font-normal">(Why you?)</span>
             </label>
             <input
@@ -97,7 +97,7 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
         </div>
 
         <div>
-          <label htmlFor="context" className="block text-sm font-medium text-slate-300 mb-2">
+          <label htmlFor="context" className="block text-sm font-medium text-slate-700 mb-2">
             Any additional context or constraints? <span className="text-slate-500 font-normal">(Optional)</span>
           </label>
           <textarea
@@ -126,7 +126,7 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
           >
             {isLoading ? (
               <span className="flex items-center gap-2">
-                <span className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+                <span className="w-4 h-4 border-2 border-slate-200 border-t-white rounded-full animate-spin"></span>
                 Analyzing...
               </span>
             ) : (

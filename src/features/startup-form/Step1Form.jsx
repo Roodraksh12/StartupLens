@@ -16,19 +16,19 @@ export default function Step1Form({ data, updateData, onNext }) {
   return (
     <div className="w-full max-w-2xl mx-auto glass-card p-6 sm:p-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-indigo-500/20 p-2 rounded-lg border border-indigo-500/30">
-          <Lightbulb className="w-5 h-5 text-indigo-400" />
+        <div className="bg-slate-100 p-2 rounded-lg border border-slate-200">
+          <Lightbulb className="w-5 h-5 text-slate-700" />
         </div>
         <div>
           <h2 className="text-2xl font-bold">The Core Idea</h2>
-          <p className="text-slate-400 text-sm">What problem are you solving?</p>
+          <p className="text-slate-500 text-sm">What problem are you solving?</p>
         </div>
       </div>
 
       <div className="space-y-6">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
-            Startup Name <span className="text-slate-500 font-normal">(Optional)</span>
+          <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+            Startup Name <span className="text-slate-400 font-normal">(Optional)</span>
           </label>
           <input
             id="name"
@@ -41,13 +41,13 @@ export default function Step1Form({ data, updateData, onNext }) {
         </div>
 
         <div>
-          <label htmlFor="idea" className="block text-sm font-medium text-slate-300 mb-2">
-            Describe your startup idea <span className="text-rose-400">*</span>
+          <label htmlFor="idea" className="block text-sm font-medium text-slate-700 mb-2">
+            Describe your startup idea <span className="text-rose-500">*</span>
           </label>
           <textarea
             id="idea"
             rows={5}
-            className={`input-field resize-none ${error ? 'border-rose-500/50 focus:ring-rose-500/50' : ''}`}
+            className={`input-field resize-none ${error ? 'border-rose-500 focus:ring-rose-500' : ''}`}
             placeholder="We are building a platform that helps..."
             value={data.idea}
             onChange={(e) => {
