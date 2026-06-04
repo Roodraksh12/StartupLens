@@ -13,6 +13,28 @@ import { RotateCcw } from 'lucide-react';
 export default function ResultsDashboard({ results, onReset }) {
   if (!results) return null;
 
+  // Extremely defensive fallback structure to prevent React crashes
+  // if the AI hallucinates keys or omits arrays.
+  const safeResults = {
+    startupSummary: results.startupSummary || "No summary provided.",
+    finalScore: { score: 0, grade: "N/A", verdict: "N/A", summary: "N/A", ...(results.finalScore || {}) },
+    problemScore: { score: 0, verdict: "N/A", reasoning: "N/A", ...(results.problemScore || {}) },
+    investorReadiness: { score: 0, verdict: "N/A", keyGaps: [], tips: [], ...(results.investorReadiness || {}) },
+    marketOpportunity: { indiaMarketSize: "N/A", globalMarketSize: "N/A", growthRate: "N/A", insight: "N/A", ...(results.marketOpportunity || {}) },
+    swot: { strengths: [], weaknesses: [], opportunities: [], threats: [], ...(results.swot || {}) },
+    risks: Array.isArray(results.risks) ? results.risks : [],
+    competitorAnalysis: Array.isArray(results.competitorAnalysis) ? results.competitorAnalysis : [],
+    businessModelGenerator: { revenueStreams: [], pricingStrategy: [], growthStrategies: [], ...(results.businessModelGenerator || {}) },
+    improvementIdeas: Array.isArray(results.improvementIdeas) ? results.improvementIdeas : [],
+    monetizationIdeas: Array.isArray(results.monetizationIdeas) ? results.monetizationIdeas : [],
+    goToMarket: { firstUsers: [], acquisitionChannels: [], marketingIdeas: [], ...(results.goToMarket || {}) },
+    mvpSuggestions: {
+      phase1: { title: "N/A", duration: "N/A", tasks: [], ...(results.mvpSuggestions?.phase1 || {}) },
+      phase2: { title: "N/A", duration: "N/A", tasks: [], ...(results.mvpSuggestions?.phase2 || {}) },
+      phase3: { title: "N/A", duration: "N/A", tasks: [], ...(results.mvpSuggestions?.phase3 || {}) }
+    }
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -49,12 +71,12 @@ export default function ResultsDashboard({ results, onReset }) {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-              <SummaryCard summary={results.startupSummary} />
+              <SummaryCard summary={safeResults.startupSummary} />
             </div>
-            <FinalScoreCard scoreData={results.finalScore} />
+            <FinalScoreCard scoreData={safeResults.finalScore} />
             <div className="flex flex-col gap-6">
-              <ProblemScoreCard problem={results.problemScore} />
-              <InvestorReadinessCard readiness={results.investorReadiness} />
+              <ProblemScoreCard problem={safeResults.problemScore} />
+              <InvestorReadinessCard readiness={safeResults.investorReadiness} />
             </div>
           </div>
         </motion.div>
@@ -66,12 +88,12 @@ export default function ResultsDashboard({ results, onReset }) {
             subtitle="Deep dive into the competitive landscape and macro risks."
           />
           <div className="grid grid-cols-1 gap-6">
-            <MarketOpportunityCard market={results.marketOpportunity} />
+            <MarketOpportunityCard market={safeResults.marketOpportunity} />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <SwotCard swot={results.swot} />
-              <RisksCard risks={results.risks} />
+              <SwotCard swot={safeResults.swot} />
+              <RisksCard risks={safeResults.risks} />
             </div>
-            <CompetitorCard competitors={results.competitorAnalysis} />
+            <CompetitorCard competitors={safeResults.competitorAnalysis} />
           </div>
         </motion.div>
 
@@ -83,14 +105,14 @@ export default function ResultsDashboard({ results, onReset }) {
           />
           <div className="grid grid-cols-1 gap-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <BusinessModelCard model={results.businessModelGenerator} />
+              <BusinessModelCard model={safeResults.businessModelGenerator} />
               <div className="flex flex-col gap-6">
-                <ImprovementIdeasCard ideas={results.improvementIdeas} />
-                <MonetizationCard models={results.monetizationIdeas} />
+                <ImprovementIdeasCard ideas={safeResults.improvementIdeas} />
+                <MonetizationCard models={safeResults.monetizationIdeas} />
               </div>
             </div>
-            <GoToMarketCard gtm={results.goToMarket} />
-            <MvpRoadmapCard mvp={results.mvpSuggestions} />
+            <GoToMarketCard gtm={safeResults.goToMarket} />
+            <MvpRoadmapCard mvp={safeResults.mvpSuggestions} />
           </div>
         </motion.div>
 
