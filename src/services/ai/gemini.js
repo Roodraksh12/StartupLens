@@ -12,6 +12,101 @@ Think step-by-step before generating the final JSON:
 
 Return ONLY a valid JSON object matching this schema. NO markdown, NO preambles.
 
+### GOLDEN EXAMPLE (MIMIC THIS TONE AND DEPTH)
+Startup Idea: A 10-minute grocery delivery app focusing strictly on urban micro-warehouses.
+Output:
+{
+  "startupSummary": "A quick-commerce platform promising 10-minute grocery deliveries by utilizing a hyper-local network of dark stores. The core mechanic relies on predictive inventory algorithms and a high-density gig-worker fleet to fulfill orders instantly.",
+  "problemScore": {
+    "score": 9,
+    "verdict": "Excellent",
+    "reasoning": "Urban Indian consumers place an extremely high premium on convenience due to increasing dual-income households and dense traffic. The 'I want it now' behavioral shift is irreversible; planned monthly grocery shopping is rapidly converting to high-frequency, low-AOV impulse buying."
+  },
+  "marketOpportunity": {
+    "indiaMarketSize": "$3.5B+ (Quick Commerce sector)",
+    "globalMarketSize": "$75B+",
+    "growthRate": "45% CAGR",
+    "insight": "The timing is impeccable as smartphone penetration and digital payments (UPI) are ubiquitous. However, this is a winner-takes-most market; if you do not achieve neighborhood dominance quickly, the cash burn will destroy you."
+  },
+  "competitorAnalysis": [
+    {
+      "name": "Blinkit (Zomato)",
+      "type": "Direct",
+      "description": "Market leader with massive capital backing and existing food-delivery cross-selling advantages.",
+      "weakness": "High reliance on third-party brands and lower margins on staples. Vulnerable to a competitor that builds a massive private-label supply chain."
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Unit Economic Collapse via Delivery Costs",
+      "severity": "High",
+      "mitigation": "You must achieve at least 3 orders per hour per rider (batching) and charge a 'surge' or small-cart fee to ensure delivery costs do not wipe out the 12% gross margin."
+    }
+  ],
+  "monetizationIdeas": [
+    {
+      "model": "FMCG Brand Bidding",
+      "description": "Charging Unilever or ITC a premium 'shelf-space' ad fee to place their snacks at the top of the app's search results.",
+      "viability": "High"
+    }
+  ],
+  "mvpSuggestions": {
+    "phase1": { "title": "Single Dark Store Proof of Concept", "duration": "Month 1-2", "tasks": ["Lease one 1,500 sqft dark store in a high-density area (e.g., Koramangala).", "Stock only the top 500 high-velocity SKUs.", "Hire 10 dedicated delivery partners on a fixed + variable payout."] },
+    "phase2": { "title": "Tech & Batching Optimization", "duration": "Month 3-4", "tasks": ["Launch the consumer app.", "Implement basic rider batching algorithms.", "Run deep-discount acquisition campaigns."] },
+    "phase3": { "title": "City Expansion", "duration": "Month 5-6", "tasks": ["Open 4 more dark stores covering adjacent pin codes.", "Introduce private label staples for higher margins.", "Secure Series A funding based on the single-store profitability metric."] }
+  },
+  "improvementIdeas": [
+    {
+      "idea": "Pivot to High-Margin Categories Only",
+      "rationale": "If 10-minute grocery unit economics fail, pivot to '10-minute Pharmacy & Wellness'. Margins on OTC medicines and supplements are 30-40% compared to 10% on groceries, easily absorbing the delivery cost."
+    }
+  ],
+  "finalScore": {
+    "score": 78,
+    "grade": "B",
+    "verdict": "Risky",
+    "summary": "This is a capital-incinerator business. A Tier-1 VC will only fund this if you have an exceptional supply-chain background and a clear path to generating advertising revenue. The execution risk is astronomical."
+  },
+  "swot": {
+    "strengths": ["Extreme consumer stickiness", "High purchase frequency", "Data moat on local consumption"],
+    "weaknesses": ["Negative contribution margins early on", "Massive rider attrition", "High real estate costs for dark stores"],
+    "opportunities": ["Private label expansion", "Ad revenue from FMCG brands", "Expanding to electronics and high-AOV items"],
+    "threats": ["Blinkit/Zepto price wars", "Regulatory caps on gig-worker hours", "Traffic safety regulations"]
+  },
+  "investorReadiness": {
+    "score": 5,
+    "verdict": "Too Early",
+    "keyGaps": ["No proof of positive contribution margin per order.", "Missing a CTO with algorithmic dispatch experience.", "Capital requirement is too high for a standard seed round."],
+    "tips": ["Run a manual WhatsApp-based 15-minute delivery service in your apartment complex for 2 weeks.", "Build a cohort analysis showing 60% retention in Month 2.", "Pitch to supply-chain specific syndicates before targeting institutional VCs."]
+  },
+  "businessModelGenerator": {
+    "revenueStreams": [
+      { "stream": "Retail Margin", "description": "The spread between wholesale purchasing and MRP.", "potential": "Medium" },
+      { "stream": "Delivery & Surge Fees", "description": "Charging INR 15-30 for orders under a certain threshold or during rain/peak hours.", "potential": "Low" }
+    ],
+    "pricingStrategy": [
+      { "strategy": "Loss-Leader Acquisition", "description": "Sell eggs and milk at a loss to drive daily app opens, while charging full price for impulse snacks and electronics.", "example": "INR 10 for a loaf of bread, but INR 50 delivery fee if it's the only item." }
+    ],
+    "growthStrategies": [
+      { "strategy": "Referral Loops", "description": "Give users 'Free Delivery for a Month' if they invite a neighbor in the same apartment building (increasing drop-density)." }
+    ]
+  },
+  "goToMarket": {
+    "firstUsers": [
+      { "segment": "Young IT Professionals (Bachelors)", "how": "Flyers under doors in massive apartment complexes with a 'Free first order' QR code.", "channel": "Physical hyper-local marketing." }
+    ],
+    "acquisitionChannels": [
+      { "channel": "Elevator Ads", "priority": "High", "tactic": "Digital screens inside society elevators highlighting 'Forgot milk? We are downstairs'." }
+    ],
+    "marketingIdeas": [
+      { "idea": "The Stop-Watch Guarantee", "effort": "Medium", "impact": "High" }
+    ]
+  }
+}
+### END GOLDEN EXAMPLE
+
+Return ONLY a valid JSON object matching this schema. NO markdown, NO preambles.
+
 {
   "startupSummary": "3-4 sentence detailed summary explaining the mechanics of the idea and the exact problem it solves.",
   "problemScore": {
@@ -98,7 +193,7 @@ Rules:
 `;
 
 export async function evaluateStartup(data) {
-  const { idea, name, industry, targetUsers, businessModel, context } = data;
+  const { idea, name, industry, targetUsers, businessModel, context, traction, unfairAdvantage } = data;
   
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   
@@ -113,6 +208,8 @@ Startup Name: ${name || "Not provided"}
 Industry: ${industry}
 Target Users: ${targetUsers}
 Business Model: ${businessModel}
+Current Traction: ${traction}
+Unfair Advantage: ${unfairAdvantage || "Not provided"}
 Additional Context: ${context || "None"}`;
 
   try {

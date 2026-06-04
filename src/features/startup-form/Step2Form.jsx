@@ -15,6 +15,11 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
     "SaaS", "Marketplace", "Subscription", "Freemium", 
     "D2C", "Commission-based", "Other"
   ];
+  
+  const tractionOptions = [
+    "Idea Stage", "Building MVP", "Pre-revenue (Beta)", 
+    "Early Revenue (<$10k/mo)", "Growth ($10k+/mo)", "Other"
+  ];
 
   return (
     <div className="w-full max-w-2xl mx-auto glass-card p-6 sm:p-8 animate-in fade-in slide-in-from-right-8 duration-500">
@@ -62,6 +67,33 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
           >
             {businessModels.map(model => <option key={model} value={model} className="bg-[#080d1a]">{model}</option>)}
           </select>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Current Traction</label>
+            <select 
+              className="input-field appearance-none"
+              value={data.traction}
+              onChange={(e) => updateData({ traction: e.target.value })}
+            >
+              {tractionOptions.map(opt => <option key={opt} value={opt} className="bg-[#080d1a]">{opt}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label htmlFor="unfairAdvantage" className="block text-sm font-medium text-slate-300 mb-2">
+              Unfair Advantage <span className="text-slate-500 font-normal">(Why you?)</span>
+            </label>
+            <input
+              id="unfairAdvantage"
+              type="text"
+              className="input-field"
+              placeholder="e.g. 10 yrs industry exp, patent..."
+              value={data.unfairAdvantage}
+              onChange={(e) => updateData({ unfairAdvantage: e.target.value })}
+            />
+          </div>
         </div>
 
         <div>

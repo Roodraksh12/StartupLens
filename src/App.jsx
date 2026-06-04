@@ -16,7 +16,9 @@ export default function App() {
     industry: 'Healthcare',
     targetUsers: 'Consumers (B2C)',
     businessModel: 'SaaS',
-    context: ''
+    context: '',
+    traction: 'Idea Stage',
+    unfairAdvantage: ''
   });
   
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +61,9 @@ export default function App() {
       industry: 'Healthcare',
       targetUsers: 'Consumers (B2C)',
       businessModel: 'SaaS',
-      context: ''
+      context: '',
+      traction: 'Idea Stage',
+      unfairAdvantage: ''
     });
     setResults(null);
     setError('');
