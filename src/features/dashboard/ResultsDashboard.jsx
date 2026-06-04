@@ -10,7 +10,6 @@ import {
 } from './ResultCards2';
 import { RotateCcw, Download } from 'lucide-react';
 import { useState } from 'react';
-import html2pdf from 'html2pdf.js';
 
 export default function ResultsDashboard({ results, onReset }) {
   const [isExporting, setIsExporting] = useState(false);
@@ -52,21 +51,34 @@ export default function ResultsDashboard({ results, onReset }) {
     show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
   };
 
-  const handleExportPdf = () => {
+  const handleExportPdf = async () => {
     setIsExporting(true);
-    const element = document.getElementById('startup-report-content');
-    
-    const opt = {
-      margin:       [0.5, 0.5, 0.5, 0.5],
-      filename:     'Startup_Analysis_Report.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true, logging: false },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
+    try {
+      const element = document.getElementById('startup-report-content');
+      
+      // Dynamically import to ensure it only runs in the browser
+      const html2pdf = (await import('html2pdf.js')).default;
+      
+      const opt = {
+        margin:       [0.5, 0.5, 0.5, 0.5],
+        filename:     'Startup_Analysis_Report.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { 
+          scale: 2, 
+          useCORS: true, 
+          logging: true,
+          windowWidth: document.documentElement.offsetWidth
+        },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
 
-    html2pdf().set(opt).from(element).save().then(() => {
+      await html2pdf().set(opt).from(element).save();
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+      alert("Failed to generate PDF. Please try again.");
+    } finally {
       setIsExporting(false);
-    });
+    }
   };
 
   const SectionHeader = ({ title, subtitle }) => (
