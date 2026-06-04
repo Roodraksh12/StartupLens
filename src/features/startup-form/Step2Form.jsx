@@ -1,4 +1,5 @@
 import { ArrowLeft, Target, Cpu } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoading }) {
   const industries = [
@@ -44,6 +45,17 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
             >
               {industries.map(ind => <option key={ind} value={ind} className="bg-white">{ind}</option>)}
             </select>
+            {data.industry === 'Other' && (
+              <motion.input 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                type="text" 
+                className="input-field mt-3 border-indigo-200 focus:border-indigo-400 focus:ring-indigo-400/20" 
+                placeholder="Type your industry..."
+                value={data.customIndustry || ''}
+                onChange={(e) => updateData({ customIndustry: e.target.value })}
+              />
+            )}
           </div>
 
           <div>
@@ -55,6 +67,17 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
             >
               {targetUsersList.map(user => <option key={user} value={user} className="bg-white">{user}</option>)}
             </select>
+            {data.targetUsers === 'Other' && (
+              <motion.input 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                type="text" 
+                className="input-field mt-3 border-indigo-200 focus:border-indigo-400 focus:ring-indigo-400/20" 
+                placeholder="Type your target users..."
+                value={data.customTargetUsers || ''}
+                onChange={(e) => updateData({ customTargetUsers: e.target.value })}
+              />
+            )}
           </div>
         </div>
 
@@ -67,6 +90,17 @@ export default function Step2Form({ data, updateData, onBack, onAnalyze, isLoadi
           >
             {businessModels.map(model => <option key={model} value={model} className="bg-white">{model}</option>)}
           </select>
+          {data.businessModel === 'Other' && (
+            <motion.input 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              type="text" 
+              className="input-field mt-3 border-indigo-200 focus:border-indigo-400 focus:ring-indigo-400/20" 
+              placeholder="Type your business model..."
+              value={data.customBusinessModel || ''}
+              onChange={(e) => updateData({ customBusinessModel: e.target.value })}
+            />
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

@@ -14,8 +14,11 @@ export default function App() {
     idea: '',
     name: '',
     industry: 'Healthcare',
+    customIndustry: '',
     targetUsers: 'Consumers (B2C)',
+    customTargetUsers: '',
     businessModel: 'SaaS',
+    customBusinessModel: '',
     context: '',
     traction: 'Idea Stage',
     unfairAdvantage: ''
@@ -35,7 +38,12 @@ export default function App() {
     setCurrentStep(3); // Move to results step to show loading state
     
     try {
-      const data = await evaluateStartup(formData);
+      const finalData = { ...formData };
+      if (finalData.industry === 'Other' && finalData.customIndustry) finalData.industry = finalData.customIndustry;
+      if (finalData.targetUsers === 'Other' && finalData.customTargetUsers) finalData.targetUsers = finalData.customTargetUsers;
+      if (finalData.businessModel === 'Other' && finalData.customBusinessModel) finalData.businessModel = finalData.customBusinessModel;
+      
+      const data = await evaluateStartup(finalData);
       setResults(data);
     } catch (err) {
       console.error(err);
@@ -59,8 +67,11 @@ export default function App() {
       idea: '',
       name: '',
       industry: 'Healthcare',
+      customIndustry: '',
       targetUsers: 'Consumers (B2C)',
+      customTargetUsers: '',
       businessModel: 'SaaS',
+      customBusinessModel: '',
       context: '',
       traction: 'Idea Stage',
       unfairAdvantage: ''
