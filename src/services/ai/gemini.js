@@ -120,9 +120,10 @@ Additional Context: ${context || "None"}`;
         model: 'gemini-3.5-flash',
         contents: prompt,
         config: {
-            systemInstruction: SYSTEM_PROMPT,
+            systemInstruction: SYSTEM_PROMPT + "\n\nUse Google Search to pull live competitor data and realistic market sizing statistics for the industry provided. Base your analysis strictly on real, current facts.",
             responseMimeType: "application/json",
             temperature: 0.7,
+            tools: [{ googleSearch: {} }],
         }
     });
     
