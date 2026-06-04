@@ -1,4 +1,4 @@
-import { GoogleGenAI } from '@google/genai';
+import Groq from 'groq-sdk';
 
 const SYSTEM_PROMPT = `You are a Tier-1 Venture Capitalist and Product Strategist with deep expertise in the Indian startup ecosystem. You are known for your brutal honesty, deep market insights, and analytical rigor. 
 
@@ -85,7 +85,7 @@ Output:
       { "stream": "Delivery & Surge Fees", "description": "Charging INR 15-30 for orders under a certain threshold or during rain/peak hours.", "potential": "Low" }
     ],
     "pricingStrategy": [
-      { "strategy": "Loss-Leader Acquisition", "description": "Sell eggs and milk at a loss to drive daily app opens, while charging full price for impulse snacks and electronics.", "example": "INR 10 for a loaf of bread, but INR 50 delivery fee if it's the only item." }
+      { "strategy": "Loss-Leader Acquisition", "description": "Sell eggs and milk at a loss to drive daily app opens, while charging full price for impulse snacks and electronics.", "example": "Concrete Indian pricing example (e.g. INR 10 for a loaf of bread, but INR 50 delivery fee if it's the only item.)" }
     ],
     "growthStrategies": [
       { "strategy": "Referral Loops", "description": "Give users 'Free Delivery for a Month' if they invite a neighbor in the same apartment building (increasing drop-density)." }
@@ -197,9 +197,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "Server misconfiguration: API key is missing on the server." });
+    return res.status(500).json({ error: "Server misconfiguration: GROQ_API_KEY is missing on the server. Please add it in your Vercel Dashboard." });
   }
 
   const { idea, name, industry, targetUsers, businessModel, context, traction, unfairAdvantage } = req.body;
@@ -218,23 +218,23 @@ Unfair Advantage: ${unfairAdvantage || "Not provided"}
 Additional Context: ${context || "None"}`;
 
   try {
-    const ai = new GoogleGenAI({ apiKey: apiKey });
-    const response = await ai.models.generateContent({
-        model: 'gemini-3.5-flash',
-        contents: prompt,
-        config: {
-            systemInstruction: SYSTEM_PROMPT + "\n\nUse Google Search to pull live competitor data and realistic market sizing statistics for the industry provided. Base your analysis strictly on real, current facts.",
-            responseMimeType: "application/json",
-            temperature: 0.7,
-            tools: [{ googleSearch: {} }],
-        }
+    const groq = new Groq({ apiKey });
+    
+    const response = await groq.chat.completions.create({
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: prompt }
+      ],
+      model: 'llama-3.3-70b-versatile',
+      temperature: 0.7,
+      response_format: { type: 'json_object' }
     });
 
-    if (!response || !response.text) {
+    if (!response.choices[0]?.message?.content) {
       throw new Error("Empty response from AI");
     }
 
-    const result = JSON.parse(response.text);
+    const result = JSON.parse(response.choices[0].message.content);
     return res.status(200).json(result);
   } catch (error) {
     console.error("API Route Error:", error);
