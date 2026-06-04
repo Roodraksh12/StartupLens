@@ -1,90 +1,85 @@
-# StartupLens - AI Startup Evaluator
+# 🚀 StartupLens - AI Startup Evaluator
 
-![StartupLens Banner](https://via.placeholder.com/1200x400/080d1a/ffffff?text=StartupLens+AI)
+Welcome to **StartupLens**! This is a lightning-fast, highly intelligent web application that acts like a brutal, top-tier Venture Capitalist (VC). 
 
-StartupLens is a lightning-fast, highly analytical AI-powered Startup Evaluator. It is engineered to act as a Tier-1 Venture Capitalist, providing founders with brutally honest, data-backed feedback on their startup ideas before they write a single line of code.
+Before you spend months building a startup, simply type your idea into this app. It will use advanced AI to analyze your idea, find its flaws, research your competitors, and give you a detailed step-by-step roadmap to launch it successfully.
 
-By enforcing strict JSON-mode reasoning using the latest Google Gemini models, StartupLens generates structured, actionable dashboards containing Market Analysis, Competitor Mapping, Go-To-Market strategies, and MVP Roadmaps.
+![StartupLens Preview](https://via.placeholder.com/1200x400/080d1a/ffffff?text=StartupLens+AI)
 
-## 🚀 Features
+---
 
-- **Brutal VC Persona:** Evaluates ideas with extreme depth, identifying fundamental unit economic flaws and existential risks.
-- **Structured Dashboard:** Transforms complex AI analysis into beautiful, readable UI components (Gauges, SWOT grids, Progress bars).
-- **Zero Prompt Engineering:** Founders simply input their core idea and target market. The platform handles the complex 500+ word Few-Shot Prompting under the hood.
-- **Apples-to-Apples Comparison:** Every idea is evaluated against the exact same 15-point criteria for fair comparison.
-- **Glassmorphism UI:** Built with Tailwind CSS v4 featuring modern gradients, blurs, and framer-motion animations.
-- **Serverless Architecture:** A pure frontend React application that hits the Gemini API directly.
+## ✨ What does it do? (Features)
 
-## 🛠️ Tech Stack
+Instead of just chatting with a bot, this app provides a beautifully designed dashboard with real startup metrics:
 
-- **Framework:** React 18 (Vite)
-- **Styling:** Tailwind CSS v4
-- **Animations:** Framer Motion
-- **Icons:** Lucide React
-- **AI Engine:** Google Gemini SDK (`@google/genai` using `gemini-3.5-flash`)
+1. **🔥 Brutal Problem Validation:** It scores how "painful" the problem you are solving actually is.
+2. **📈 Market Sizing:** It estimates the Total Addressable Market (TAM) for your industry.
+3. **⚔️ Competitor Analysis:** It lists real competitors and tells you exactly what their weaknesses are.
+4. **💰 Monetization Ideas:** It gives you 3 different ways to make money from your idea.
+5. **🗺️ MVP Roadmap:** It generates a strict 6-month plan to build your first prototype.
+6. **📊 SWOT Analysis:** A full breakdown of your Strengths, Weaknesses, Opportunities, and Threats.
 
-## 🏗️ Architecture
+---
 
-This project follows a Feature-Based Architecture for scalable frontend development:
+## 🛠️ How does it work under the hood?
 
+This project is built using modern web technologies and advanced AI techniques:
+
+* **React & Vite:** Makes the app incredibly fast and responsive.
+* **Tailwind CSS v4:** Gives the app that beautiful, dark "Glassmorphism" look with glowing gradients.
+* **Google Gemini 3.5 Flash:** The brain of the operation. We use Google's latest AI model for blazing-fast reasoning.
+
+### 🧠 The Secret Sauce: RAG & Few-Shot Prompting
+We don't just ask the AI a simple question. We use a massive 500-word "System Prompt" that forces the AI to adopt the persona of a brutal VC. Furthermore, the app uses **RAG (Retrieval-Augmented Generation) via Google Search Grounding**. This means the AI actually browses the live internet in the background to pull real-time competitor data and market sizes before it gives you an answer!
+
+---
+
+## 💻 How to run this on your own computer
+
+It is incredibly easy to get this running locally. Just follow these steps:
+
+### Step 1: Clone the code
+Open your terminal and download the code:
+```bash
+git clone https://github.com/yourusername/StartupLens.git
+cd StartupLens
 ```
-src/
-├── features/
-│   ├── startup-form/      # Idea input and validation logic
-│   └── dashboard/         # Results rendering (SWOT, Competitors, GTM)
-├── shared/
-│   ├── components/        # Reusable UI (Header, Loaders)
-│   ├── hooks/             # Custom React hooks
-│   └── utils/             # Helper functions
-├── services/
-│   └── ai/
-│       └── gemini.js      # Core AI logic, Prompts, and RAG Integration
-└── App.jsx                # Main state container
+
+### Step 2: Install dependencies
+Install all the required packages:
+```bash
+npm install
 ```
 
-## ⚙️ Installation & Setup
+### Step 3: Add your AI Brain (API Key)
+You need a free Google Gemini API key for the AI to work.
+1. Go to [Google AI Studio](https://aistudio.google.com/) and get a free API key.
+2. Create a file named `.env` in the root folder of this project.
+3. Add this line to the file, replacing the text with your actual key:
+```env
+VITE_GEMINI_API_KEY="your_actual_api_key_here"
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/startuplens.git
-   cd startuplens
-   ```
+### Step 4: Start the app!
+Run the development server:
+```bash
+npm run dev
+```
+Open the link it gives you (usually `http://localhost:5173`) in your browser, and start evaluating your startup ideas!
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+---
 
-3. **Set up Environment Variables:**
-   Create a `.env` file in the root directory and add your Google Gemini API Key (get it free from [Google AI Studio](https://aistudio.google.com/)).
-   ```env
-   VITE_GEMINI_API_KEY="your_api_key_here"
-   ```
+## 📁 Project Structure (For Developers)
 
-4. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
+If you want to edit the code, here is how the folders are organized:
+* `src/features/` - Contains the forms and dashboard components.
+* `src/shared/` - Contains UI elements used everywhere (like the Header).
+* `src/services/ai/gemini.js` - **This is where the magic happens!** You can edit the AI Prompt and logic here.
 
-5. **Build for production:**
-   ```bash
-   npm run build
-   ```
-
-## 🧠 The AI Prompt Engineering Strategy
-
-This application does not use basic chatbot queries. It uses **In-Context Learning (Few-Shot Prompting)** and **Chain of Thought** reasoning. The AI is explicitly forced to:
-1. Deconstruct the core value proposition.
-2. Identify the single biggest fatal flaw in the business model.
-3. Map out the competitive landscape.
-4. Formulate non-obvious pivot strategies.
-5. Return strictly validated JSON mapping directly to the React component states.
+---
 
 ## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! 
-If you want to integrate an external Vector Database for custom RAG, please open an issue first to discuss the architecture.
+Want to make StartupLens even better? Feel free to fork the repository and submit a Pull Request!
 
 ## 📄 License
-
-This project is licensed under the MIT License.
+This project is open-source and free to use under the MIT License.
