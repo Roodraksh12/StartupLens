@@ -1,5 +1,15 @@
-import Groq from 'groq-sdk';
+import { GoogleGenAI } from '@google/genai';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const SYSTEM_PROMPT = `You are a Tier-1 Venture Capitalist and Product Strategist with deep expertise in the Indian startup ecosystem. You are known for your brutal honesty, deep market insights, and analytical rigor. 
 
 Your objective is to evaluate startup ideas with extreme depth. DO NOT give generic, basic, or overly polite answers. Instead, provide detailed, nuanced, and actionable analysis. 
@@ -103,97 +113,7 @@ Output:
     ]
   }
 }
-### GOLDEN EXAMPLE 2 (Deep-Tech/B2B Example)
-Startup Idea: Develop an edge AI-powered predictive maintenance platform for India's aging industrial equipment market, leveraging real-time sensor data and digital twin simulations to optimize equipment uptime. The platform integrates with SCADA systems and ERP software.
-Output:
-{
-  "startupSummary": "Prediktech is an edge AI-powered predictive maintenance platform designed for India's industrial equipment market. It utilizes real-time sensor data, machine learning algorithms, and digital twin simulations to optimize equipment uptime and reduce downtime. The platform integrates with existing SCADA systems, IoT sensors, and ERP software.",
-   "problemScore": {
-       "score": 8,
-       "verdict": "Excellent",
-       "reasoning": "The problem of predictive maintenance in India's industrial sector is significant due to aging equipment and the high cost of downtime. The manufacturing sector alone loses around 10% of its production due to equipment failures. This presents a substantial opportunity for a predictive maintenance solution."
-   },
-   "marketOpportunity": {
-       "indiaMarketSize": "INR 10,000 crores (Industrial Automation market in India)",
-       "globalMarketSize": "USD 10 billion (Global Predictive Maintenance market)",
-       "growthRate": "20% CAGR (expected growth rate for the next 5 years)",
-       "insight": "The Indian government's push for Industry 4.0 and the increasing adoption of IoT and AI technologies in the industrial sector are expected to drive the growth of the predictive maintenance market in India."
-   },
-   "competitorAnalysis": [
-       {
-           "name": "Siemens MindSphere",
-           "type": "Direct",
-           "description": "A comprehensive industrial IoT platform that includes predictive maintenance capabilities, with a significant presence in India.",
-           "weakness": "Complexity of the platform, high cost of deployment, and heavy reliance on traditional centralized cloud infrastructure instead of edge AI."
-       }
-   ],
-   "risks": [
-       {
-           "risk": "High dependency on quality of sensor data",
-           "severity": "High",
-           "mitigation": "Implementing robust data validation and cleansing mechanisms, as well as partnering with reputable sensor manufacturers to ensure baseline data integrity."
-       }
-   ],
-   "monetizationIdeas": [
-       {
-           "model": "Subscription-based SaaS",
-           "description": "Offering a tiered pricing model based on the number of equipment nodes and compute-intensity required, with discounts for long-term lock-ins.",
-           "viability": "High"
-       }
-   ],
-   "mvpSuggestions": {
-       "phase1": { "title": "Development of core platform", "duration": "6 months", "tasks": ["Developing the edge AI and digital twin simulation capabilities", "Integrating with SCADA systems and IoT sensors", "Building a user-friendly interface for equipment operators"] },
-       "phase2": { "title": "Pilot projects and testing", "duration": "6 months", "tasks": ["Conducting pilot projects with 5 major industrial equipment manufacturers", "Testing and refining the platform based on feedback", "Developing a go-to-market strategy"] },
-       "phase3": { "title": "Scaling and expansion", "duration": "12 months", "tasks": ["Scaling the platform to support a larger customer base", "Expanding the sales and marketing team", "Developing strategic partnerships with industry players"] }
-   },
-   "improvementIdeas": [
-       {
-           "idea": "Integrating with emerging technologies like blockchain for compliance",
-           "rationale": "This could provide immutable audit trails for safety-critical maintenance, offering a massive unique selling proposition for heavily regulated industries like energy and transportation."
-       }
-   ],
-   "finalScore": {
-       "score": 85,
-       "grade": "A",
-       "verdict": "Highly Investable",
-       "summary": "Prediktech has a strong value proposition, a large and growing market, and a unique combination of edge AI and digital twin simulations. With a solid business plan and a talented team, this startup has the potential to become a leader in the Indian industrial automation and predictive maintenance market."
-   },
-   "swot": {
-       "strengths": ["Unique combination of edge AI and digital twin simulations", "Strong partnerships with Indian industry players"],
-       "weaknesses": ["High dependency on quality of sensor data", "High research and development costs"],
-       "opportunities": ["Growing demand for predictive maintenance in India", "Emerging industries like renewable energy and electric vehicles"],
-       "threats": ["Competition from established global players", "Cybersecurity threats to edge nodes"]
-   },
-   "investorReadiness": {
-       "score": 8,
-       "verdict": "Ready",
-       "keyGaps": ["Limited international presence", "Dependence on a few large legacy customers"],
-       "tips": ["Develop a comprehensive go-to-market strategy for international markets", "Diversify the customer base to reduce dependence on a few large buyers"]
-   },
-   "businessModelGenerator": {
-       "revenueStreams": [
-           { "stream": "Subscription-based SaaS", "description": "Offering a tiered pricing model based on the number of equipment and features required", "potential": "High" }
-       ],
-       "pricingStrategy": [
-           { "strategy": "Value-based pricing", "description": "Pricing based on the value provided to the customer, such as exact cost savings or recovered downtime", "example": "INR 20,000 per month per critical asset monitored" }
-       ],
-       "growthStrategies": [
-           { "strategy": "System Integrator Partnerships", "description": "Partnering with massive industry players (like L&T) to white-label or bundle the software with their hardware installations." }
-       ]
-   },
-   "goToMarket": {
-       "firstUsers": [
-           { "segment": "Large industrial equipment manufacturers", "how": "Direct enterprise sales with a 3-month free pilot program proving immediate ROI.", "channel": "Industry conferences and direct B2B outreach" }
-       ],
-       "acquisitionChannels": [
-           { "channel": "Strategic Partnerships", "priority": "High", "tactic": "Partnering with equipment manufacturers to offer bundled solutions out-of-the-box." }
-       ],
-       "marketingIdeas": [
-           { "idea": "Publishing data-driven whitepapers on predictive downtime savings in Indian manufacturing", "effort": "Medium", "impact": "High" }
-       ]
-   }
-}
-### END GOLDEN EXAMPLES
+### END GOLDEN EXAMPLE
 
 Return ONLY a valid JSON object matching this schema. NO markdown, NO preambles.
 
@@ -282,52 +202,83 @@ Rules:
 - improvementIdeas should always appear regardless of how good or bad the idea is
 `;
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+const IDEA_GENERATOR_PROMPT = `Generate 3 completely unique, complex, and "mind-shaking" startup ideas specifically designed for the Indian ecosystem.
+DO NOT generate simple or generic ideas like food delivery, basic social media, or simple edtech apps.
+Instead, think about Deep Tech, complex B2B SaaS, hard-tech, specialized AI infrastructure, space-tech, hyper-niche FinTech, biotech, or hardcore supply chain innovations.
 
-  const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) {
-    return res.status(500).json({ error: "Server misconfiguration: GROQ_API_KEY is missing on the server. Please add it in your Vercel Dashboard." });
-  }
+Make 1 a brilliant, highly investable, game-changing deep-tech or hardcore infrastructure idea with a massive moat.
+Make 1 a complex but deeply flawed idea (e.g., an ambitious hardware play that fundamentally misunderstands Indian unit economics).
+Make 1 an incredibly niche B2B idea that sounds crazy but might actually work with a massive pivot.
 
-  const { idea, name, industry, targetUsers, businessModel, context, traction, unfairAdvantage } = req.body;
+For each, provide: idea (must be at least 3-4 sentences of deep technical and market detail), name, industry, targetUsers, businessModel, traction, unfairAdvantage.
 
-  if (!idea) {
-    return res.status(400).json({ error: "Startup idea is required" });
-  }
-
-  const prompt = `Startup Idea: ${idea}
-Startup Name: ${name || "Not provided"}
-Industry: ${industry}
-Target Users: ${targetUsers}
-Business Model: ${businessModel}
-Current Traction: ${traction}
-Unfair Advantage: ${unfairAdvantage || "Not provided"}
-Additional Context: ${context || "None"}`;
-
-  try {
-    const groq = new Groq({ apiKey });
-    
-    const response = await groq.chat.completions.create({
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: prompt }
-      ],
-      model: 'llama-3.3-70b-versatile',
-      temperature: 0.7,
-      response_format: { type: 'json_object' }
-    });
-
-    if (!response.choices[0]?.message?.content) {
-      throw new Error("Empty response from AI");
+Output MUST be valid JSON matching this schema:
+{
+  "startups": [
+    {
+      "idea": "string",
+      "name": "string",
+      "industry": "string",
+      "targetUsers": "string",
+      "businessModel": "string",
+      "traction": "string",
+      "unfairAdvantage": "string"
     }
+  ]
+}`;
 
-    const result = JSON.parse(response.choices[0].message.content);
-    return res.status(200).json(result);
-  } catch (error) {
-    console.error("API Route Error:", error);
-    return res.status(500).json({ error: error.message || "Failed to generate analysis" });
+async function run() {
+  console.log("Generating initial startup ideas...");
+  
+  const ideasResponse = await ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: IDEA_GENERATOR_PROMPT,
+    config: {
+      responseMimeType: "application/json",
+      temperature: 0.9,
+    }
+  });
+
+  const { startups } = JSON.parse(ideasResponse.text);
+  console.log(`Generated ${startups.length} ideas. Starting evaluation...`);
+
+  const outputFile = path.join(__dirname, '..', 'training_data.jsonl');
+
+  for (const startup of startups) {
+    const userPrompt = `Startup Idea: ${startup.idea}\nStartup Name: ${startup.name}\nIndustry: ${startup.industry}\nTarget Users: ${startup.targetUsers}\nBusiness Model: ${startup.businessModel}\nCurrent Traction: ${startup.traction}\nUnfair Advantage: ${startup.unfairAdvantage}\nAdditional Context: None`;
+
+    console.log(`Evaluating: ${startup.name}...`);
+
+    try {
+      const evalResponse = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: userPrompt,
+        config: {
+          systemInstruction: SYSTEM_PROMPT,
+          responseMimeType: "application/json",
+          temperature: 0.7,
+        }
+      });
+
+      const assistantResponse = evalResponse.text;
+
+      // Construct OpenAI Fine-tuning JSONL format
+      const jsonlEntry = {
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userPrompt },
+          { role: "assistant", content: assistantResponse }
+        ]
+      };
+
+      fs.appendFileSync(outputFile, JSON.stringify(jsonlEntry) + "\n");
+      console.log(`✅ Saved to ${outputFile}`);
+    } catch (e) {
+      console.error(`❌ Failed evaluating ${startup.name}:`, e.message);
+    }
   }
+
+  console.log("\nDone! You can run this script repeatedly to grow your dataset.");
 }
+
+run();
