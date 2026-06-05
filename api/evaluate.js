@@ -282,14 +282,16 @@ Rules:
 - improvementIdeas should always appear regardless of how good or bad the idea is
 `;
 
+import { GoogleGenAI } from '@google/genai';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const apiKey = process.env.GROQ_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "Server misconfiguration: GROQ_API_KEY is missing on the server. Please add it in your Vercel Dashboard." });
+    return res.status(500).json({ error: "Server misconfiguration: GEMINI_API_KEY is missing on the server. Please add it in your Vercel Dashboard." });
   }
 
   const { idea, name, industry, targetUsers, businessModel, context, traction, unfairAdvantage } = req.body;
@@ -308,23 +310,23 @@ Unfair Advantage: ${unfairAdvantage || "Not provided"}
 Additional Context: ${context || "None"}`;
 
   try {
-    const groq = new Groq({ apiKey });
+    const ai = new GoogleGenAI({ apiKey });
     
-    const response = await groq.chat.completions.create({
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: prompt }
-      ],
-      model: 'llama-3.3-70b-versatile',
-      temperature: 0.7,
-      response_format: { type: 'json_object' }
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+            systemInstruction: SYSTEM_PROMPT,
+            responseMimeType: "application/json",
+            temperature: 0.7,
+        }
     });
 
-    if (!response.choices[0]?.message?.content) {
+    if (!response.text) {
       throw new Error("Empty response from AI");
     }
 
-    const result = JSON.parse(response.choices[0].message.content);
+    const result = JSON.parse(response.text);
     return res.status(200).json(result);
   } catch (error) {
     console.error("API Route Error:", error);
