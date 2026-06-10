@@ -289,8 +289,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const isLocal = process.env.USE_LOCAL_LLM === 'true';
   const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
-  if (!apiKey) {
+  
+  if (!isLocal && !apiKey) {
     return res.status(500).json({ error: "Server misconfiguration: GEMINI_API_KEY is missing on the server. Please add it in your Vercel Dashboard." });
   }
 
@@ -310,24 +312,50 @@ Unfair Advantage: ${unfairAdvantage || "Not provided"}
 Additional Context: ${context || "None"}`;
 
   try {
-    const ai = new GoogleGenAI({ apiKey });
-    
-    const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-            systemInstruction: SYSTEM_PROMPT,
-            responseMimeType: "application/json",
-            temperature: 0.7,
-        }
-    });
+    if (isLocal) {
+      const modelName = process.env.LOCAL_MODEL_NAME || 'llama3';
+      const ollamaResponse = await fetch('http://127.0.0.1:11434/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: modelName,
+          system: SYSTEM_PROMPT,
+          prompt: prompt,
+          stream: false,
+          format: 'json',
+          options: {
+            temperature: 0.7
+          }
+        })
+      });
 
-    if (!response.text) {
-      throw new Error("Empty response from AI");
+      if (!ollamaResponse.ok) {
+        throw new Error(`Ollama connection failed: ${ollamaResponse.statusText}. Is Ollama running?`);
+      }
+      
+      const data = await ollamaResponse.json();
+      const result = JSON.parse(data.response);
+      return res.status(200).json(result);
+    } else {
+      const ai = new GoogleGenAI({ apiKey });
+      
+      const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: prompt,
+          config: {
+              systemInstruction: SYSTEM_PROMPT,
+              responseMimeType: "application/json",
+              temperature: 0.7,
+          }
+      });
+
+      if (!response.text) {
+        throw new Error("Empty response from AI");
+      }
+
+      const result = JSON.parse(response.text);
+      return res.status(200).json(result);
     }
-
-    const result = JSON.parse(response.text);
-    return res.status(200).json(result);
   } catch (error) {
     console.error("API Route Error:", error);
     return res.status(500).json({ error: error.message || "Failed to generate analysis" });

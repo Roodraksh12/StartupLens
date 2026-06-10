@@ -11,8 +11,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const isLocal = process.env.USE_LOCAL_LLM === 'true';
   const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
-  if (!apiKey) {
+  
+  if (!isLocal && !apiKey) {
     return res.status(500).json({ error: "Server misconfiguration: GEMINI_API_KEY is missing on the server." });
   }
 
@@ -39,22 +41,58 @@ export default async function handler(req, res) {
   });
 
   try {
-    const ai = new GoogleGenAI({ apiKey });
-    
-    const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: formattedContents,
-        config: {
-            systemInstruction: SYSTEM_PROMPT,
-            temperature: 0.7,
-        }
-    });
+    if (isLocal) {
+      const modelName = process.env.LOCAL_MODEL_NAME || 'llama3';
+      
+      const ollamaMessages = [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...messages.map((msg, index) => {
+          let text = msg.content;
+          if (index === 0 && msg.role === 'user') {
+              text = contextPrefix + text;
+          }
+          return {
+            role: msg.role === 'user' ? 'user' : 'assistant',
+            content: text
+          };
+        })
+      ];
 
-    if (!response.text) {
-      throw new Error("Empty response from AI");
+      const ollamaResponse = await fetch('http://127.0.0.1:11434/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: modelName,
+          messages: ollamaMessages,
+          stream: false,
+          options: { temperature: 0.7 }
+        })
+      });
+
+      if (!ollamaResponse.ok) {
+        throw new Error(`Ollama connection failed: ${ollamaResponse.statusText}. Is Ollama running?`);
+      }
+      
+      const data = await ollamaResponse.json();
+      return res.status(200).json({ reply: data.message.content });
+    } else {
+      const ai = new GoogleGenAI({ apiKey });
+      
+      const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: formattedContents,
+          config: {
+              systemInstruction: SYSTEM_PROMPT,
+              temperature: 0.7,
+          }
+      });
+
+      if (!response.text) {
+        throw new Error("Empty response from AI");
+      }
+
+      return res.status(200).json({ reply: response.text });
     }
-
-    return res.status(200).json({ reply: response.text });
   } catch (error) {
     console.error("API Route Error:", error);
     return res.status(500).json({ error: error.message || "Failed to generate chat response" });
