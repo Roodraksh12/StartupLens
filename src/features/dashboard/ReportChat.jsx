@@ -90,11 +90,11 @@ export default function ReportChat({ results }) {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.1, y: 50, x: 50 }}
-            animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-            exit={{ opacity: 0, scale: 0.1, y: 50, x: 50 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            style={{ transformOrigin: "bottom right" }}
+            initial={{ opacity: 0, scale: 0.2 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.2 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            style={{ transformOrigin: "calc(100% - 28px) calc(100% - 28px)" }}
             className="fixed bottom-6 right-6 w-[90vw] max-w-[400px] h-[500px] max-h-[80vh] bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200/50"
           >
             {/* Header */}
