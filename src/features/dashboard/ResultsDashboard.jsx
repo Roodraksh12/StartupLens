@@ -11,6 +11,7 @@ import {
 import { RotateCcw, Download } from 'lucide-react';
 import { useState } from 'react';
 import ReportChat from './ReportChat';
+import html2pdf from 'html2pdf.js';
 
 export default function ResultsDashboard({ results, onReset }) {
   const [isExporting, setIsExporting] = useState(false);
@@ -56,9 +57,6 @@ export default function ResultsDashboard({ results, onReset }) {
     setIsExporting(true);
     try {
       const element = document.getElementById('startup-report-content');
-      
-      // Dynamically import to ensure it only runs in the browser
-      const html2pdf = (await import('html2pdf.js')).default;
       
       const opt = {
         margin:       [0.5, 0.5, 0.5, 0.5],
