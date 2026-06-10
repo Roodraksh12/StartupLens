@@ -10,6 +10,7 @@ import {
 } from './ResultCards2';
 import { RotateCcw, Download } from 'lucide-react';
 import { useState } from 'react';
+import ReportChat from './ReportChat';
 
 export default function ResultsDashboard({ results, onReset }) {
   const [isExporting, setIsExporting] = useState(false);
@@ -183,6 +184,9 @@ export default function ResultsDashboard({ results, onReset }) {
           Evaluate Another Idea
         </button>
       </motion.div>
+
+      {/* AI Chat Bubble */}
+      <ReportChat results={safeResults} />
     </div>
   );
 }
