@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Send, Loader2, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ReportChat({ results }) {
@@ -8,6 +8,15 @@ export default function ReportChat({ results }) {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setMessages([]); // Close means remove chat
+  };
+
+  const handleMinimize = () => {
+    setIsOpen(false); // Just hide, keep chat
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,39 +71,54 @@ export default function ReportChat({ results }) {
   return (
     <>
       {/* Floating Action Button */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-xl flex items-center justify-center z-50 transition-colors hover:bg-indigo-700 ${isOpen ? 'hidden' : ''}`}
-      >
-        <MessageCircle className="w-6 h-6" />
-      </motion.button>
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 1.2 }}
+            onClick={() => setIsOpen(true)}
+            className="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600/80 backdrop-blur-md border border-white/20 text-white rounded-full shadow-[0_8px_32px_0_rgba(79,70,229,0.37)] flex items-center justify-center z-50 transition-colors hover:bg-indigo-600"
+          >
+            <MessageCircle className="w-6 h-6" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 w-[90vw] max-w-[400px] h-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200"
+            initial={{ opacity: 0, scale: 0.1, y: 50, x: 50 }}
+            animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
+            exit={{ opacity: 0, scale: 0.1, y: 50, x: 50 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            style={{ transformOrigin: "bottom right" }}
+            className="fixed bottom-6 right-6 w-[90vw] max-w-[400px] h-[500px] max-h-[80vh] bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden border border-slate-200/50"
           >
             {/* Header */}
-            <div className="bg-indigo-600 text-white px-4 py-3 flex justify-between items-center shrink-0">
+            <div className="bg-indigo-600/90 backdrop-blur-md text-white px-4 py-3 flex justify-between items-center shrink-0 border-b border-indigo-500">
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" />
                 <span className="font-semibold text-sm">Ask the VC</span>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-indigo-200 hover:text-white transition-colors p-1 rounded-md hover:bg-indigo-700"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-1">
+                <button 
+                  onClick={handleMinimize}
+                  className="text-indigo-200 hover:text-white transition-colors p-1 rounded-md hover:bg-indigo-700/50"
+                  title="Minimize"
+                >
+                  <Minus className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={handleClose}
+                  className="text-indigo-200 hover:text-white transition-colors p-1 rounded-md hover:bg-indigo-700/50"
+                  title="Close & Clear Chat"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Messages Area */}
